@@ -60,13 +60,13 @@ exports.userTrackingCat = function(userIndex, cat) {
 	return -1;
 }
 
-exports.addUser(user) {
+exports.addUser = function(user) {
 	let newUser = require('./user_template.json');
 	newUser.name = user;
 	userData.entries.push(newUser);
 }
 
-exports.addUserCat(userIndex, cat) {
+exports.addUserCat = function(userIndex, cat) {
 	let newUserCat = require('./category_template.json');
 	newUserCat.category = cat;
 	newUserCat.count = 1;
