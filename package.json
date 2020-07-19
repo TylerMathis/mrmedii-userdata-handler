@@ -1,0 +1,26 @@
+{
+  "name": "mrmedii-userdata-handler",
+  "version": "1.0.0",
+  "description": "An npm module to track information about users in an IRC chat ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TylerMathis/mrmedii-userdata-handler.git"
+  },
+  "keywords": [
+    "Twitch",
+    "irc"
+  ],
+  "author": "Tyler Hostler-Mathis <Hostler.Mathis.Tyler@gmail.com> (TylerMathis.github.io)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TylerMathis/mrmedii-userdata-handler/issues"
+  },
+  "homepage": "https://github.com/TylerMathis/mrmedii-userdata-handler#readme",
+  "dependencies": {
+    "fs": "0.0.1-security"
+  }
+}
