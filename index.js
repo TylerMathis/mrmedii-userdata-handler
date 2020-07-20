@@ -122,17 +122,18 @@ exports.resetUserData = function () {
 
 exports.saveUserData = function(bak) {
 	let fileName = __dirname + '/user_data.json';
-	if (bak) {
-		fileName += '.bak';
-		exports.log('user_data.json has been backed up to user_data.json.bak');
-	}  
+	if (bak)
+		fileName = './user_data.json.bak';
 	fs.writeFile(fileName, JSON.stringify(userData, null, 2), err => {
 	    if (err) {
 	      exports.logFatal(`There was an error saving user_data.json...`);
 	      throw err;
 	    }
 	  });
-	exports.log('user_data.json has been udpated')
+	if (bak)
+		exports.log('user_data.json has been backed up to user_data.json.bak in your working directory');
+	else
+		exports.log('user_data.json has been updated');
 }
 
 exports.log = function(msg) {
