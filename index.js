@@ -10,7 +10,7 @@ const catTemplate = require('./category_template.json');
 var client = undefined
 
 exports.init = function(c) {
-	saveUserData(bak = true);
+	saveUserData(true);
 	client = c;
 	client.on('message', onMessageHandler);
 }
