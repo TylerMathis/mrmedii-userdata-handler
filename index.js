@@ -18,6 +18,7 @@ exports.init = function(c) {
 function onMessageHandler(target, context, msg, self) {
 
 	if (self) return;
+	if (msg[0] != '!') return;
 
 	const cleanMsg = msg.trim().toLowerCase();
 	const splitMsg = cleanMsg.split(' ');
@@ -31,6 +32,7 @@ function onMessageHandler(target, context, msg, self) {
 	let normalizedCat = undefined;
 
 	switch (paramLength) {
+		default:
 		case 3:
 			param2 = splitMsg[2];
 		case 2:
@@ -44,21 +46,33 @@ function onMessageHandler(target, context, msg, self) {
     if (paramLength > 1) {
     	if (commandName.slice(-5) === 'count') {
     		const reqCategory = normalizedCat.slice(0, -5);
-    		if (getUserData(target, normalizedUser, reqCategory))
+    		if (getUserData(target, normalizedUser, reqCategory, true))
     			return;
     	}
     	else {
-    		modifyData(target, normalizedUser, normalizedCat);
-    		return;
+    		if (modifyData(target, context, normalizedUser, normalizedCat))
+    			return;
     	}
     }
 
-    if (commandName === '!addcategory')
-    	addCategory(commandParam);
+    if (isSuperUser(context))
+    {
+    	switch(commandName) {
+    		case '!addcategory':
+    			addCategory(param1, param2);
+    			break;
+    		case '!removeuser':
+    			removeUser(normalizedUser);
+    			break;
+    		case '!resetuserdata':
+    			resetUserData();
+    			break;
+    	}
+    }
 }
 
 function addCategory(cat, undo) {
-	if (categoryExists(cat)) {
+	if (categoryExists(cat) != 'dne') {
 		logError('Category ' + cat + ' already exists');
 		return;
 	}
@@ -70,7 +84,7 @@ function addCategory(cat, undo) {
 	saveUserData();
 }
 
-function modifyData(target, user, cat) {
+function modifyData(target, context, user, cat) {
 	const catType = categoryExists(cat);
 
 	switch (catType) {
@@ -80,7 +94,7 @@ function modifyData(target, user, cat) {
 		case 'name':
 			return incrementData(target, user, cat);
 		case 'undo':
-			return decrementData(target, user, cat);
+			return decrementData(target, context, user, cat);
 	}
 }
 
@@ -101,13 +115,21 @@ function incrementData(target, user, cat) {
 	else {
 		addUser(user);
 		addUserCat(userData.entries.length - 1, user, cat);
+		getUserData(target, user, cat, true);
 	}
 
 	saveUserData();
 	return true;
 }
 
-function decrementData(target, user, undo) {
+function decrementData(target, context, user, undo) {
+	log(context.username);
+	log(user.slice(1));
+	if (context.username === user.slice(1)) {
+		client.say(target, 'You alone cannot change your fate widepeepoHappy');
+		return;
+	}
+
 	const validUser = userExists(user);
 
 	if (validUser >= 0) {
@@ -122,9 +144,7 @@ function decrementData(target, user, undo) {
 				log(cat + ' was updated on user ' + user);
 			}
 			else
-			{
 				client.say(target, 'Yikes, you were too slow! PepeHands');
-			}
 		}
 		else {
 			console.logError('User does not own decremented category');
@@ -226,13 +246,14 @@ function getUserData(target, user, cat, isIncrement) {
 function removeUser(user) {
 	const validUser = userExists(user);
 
-	log(validUser);
 	if (validUser >= 0) {
 		userData.entries.splice(validUser, 1);
 		log(user + ' has been removed');
 	}
 	else 
 		logError(user + ' does not exist');
+
+	saveUserData();
 }
 
 function resetUserData() {
@@ -264,6 +285,10 @@ function saveUserData(bak) {
 function getCurrentMillis() {
 	let d = new Date();
 	return d.getTime();
+}
+
+function isSuperUser(context) {
+	return (context.username === 'mrmedii' || context.mod)
 }
 
 function log(msg) {
