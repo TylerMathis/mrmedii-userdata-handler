@@ -267,7 +267,7 @@ function resetUserData() {
 }
 
 function saveUserData(bak) {
-	let fileName = '/user_data.json';
+	let fileName = './user_data.json';
 	if (bak)
 		fileName = './user_data.json.bak';
 	fs.writeFile(fileName, JSON.stringify(userData, null, 2), err => {
