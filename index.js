@@ -1,7 +1,7 @@
 'use strict'
 
 const fs = require('fs');
-let userData = require('./user_data.json');
+let userData = require('../../user_data.json');
 
 const userTemplate = require('./user_template.json');
 const userCatTemplate = require('./user_category_template.json');
@@ -267,7 +267,7 @@ function resetUserData() {
 }
 
 function saveUserData(bak) {
-	let fileName = __dirname + '/user_data.json';
+	let fileName = '/user_data.json';
 	if (bak)
 		fileName = './user_data.json.bak';
 	fs.writeFile(fileName, JSON.stringify(userData, null, 2), err => {
@@ -280,7 +280,7 @@ function saveUserData(bak) {
 		log('user_data.json has been backed up to user_data.json.bak in your working directory');
 	else
 		log('user_data.json has been updated');
-}
+}i
 
 function getCurrentMillis() {
 	let d = new Date();
