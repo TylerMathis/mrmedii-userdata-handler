@@ -280,7 +280,7 @@ function saveUserData(bak) {
 		log('user_data.json has been backed up to user_data.json.bak in your working directory');
 	else
 		log('user_data.json has been updated');
-}i
+}
 
 function getCurrentMillis() {
 	let d = new Date();
